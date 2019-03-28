@@ -7,7 +7,9 @@ var Final : UnityEngine.UI.Text;
 var End : GameObject;
 
 function Start () {
-	End.SetActive(false);
+	if (End) {
+		End.SetActive(false);
+	}
 	PlayerPrefs.SetString("GameOver", "false");
 	PlayerPrefs.SetInt("BounceCount", 0);
 	if (Application.loadedLevelName == "Speed") {
@@ -42,7 +44,9 @@ function Update () {
 	if (Application.loadedLevelName == "Survival" || Application.loadedLevelName == "Wall" || Application.loadedLevelName == "MainMenu") {
 		OpponentScore.text = PlayerPrefs.GetInt("BounceCount").ToString();
 		PlayerScore.text = PlayerPrefs.GetInt("BounceCount").ToString();
-		HighScore.text = "h i g h s c o r e :     " + PlayerPrefs.GetInt(Application.loadedLevelName + "Highscore").ToString();
+		if (HighScore) {
+			HighScore.text = "h i g h s c o r e :     " + PlayerPrefs.GetInt(Application.loadedLevelName + "Highscore").ToString();
+		}
 		if (PlayerPrefs.GetInt("BounceCount") > PlayerPrefs.GetInt(Application.loadedLevelName + "Highscore")) {
 			PlayerPrefs.SetInt(Application.loadedLevelName + "Highscore", PlayerPrefs.GetInt("BounceCount"));
 		}
@@ -51,11 +55,13 @@ function Update () {
 			End.SetActive(true);
 		}
 	}else {
-		OpponentScore.text = PlayerPrefs.GetInt("OpponentScore").ToString();
-		PlayerScore.text = PlayerPrefs.GetInt("PlayerScore").ToString();
-		if (Application.loadedLevelName == "Endless") {
-		
-		}else if (Application.loadedLevelName == "AI") {
+		if (OpponentScore) {
+			OpponentScore.text = PlayerPrefs.GetInt("OpponentScore").ToString();
+		}
+		if (PlayerScore) {
+			PlayerScore.text = PlayerPrefs.GetInt("PlayerScore").ToString();
+		}
+		if (Application.loadedLevelName == "AI") {
 			if (PlayerPrefs.GetInt("PlayerScore") == 10) {
 				PlayerPrefs.SetString("GameOver", "true");
 				Final.text = "A.I. WINS";
@@ -78,7 +84,7 @@ function Update () {
 				End.SetActive(true);
 				PlayerPrefs.SetInt("Victor", PlayerPrefs.GetInt("Level" + PlayerPrefs.GetString("MatchLevel") + PlayerPrefs.GetInt("Player1#")));
 			}
-		}else {
+		}else if (Application.loadedLevelName != "Endless") {
 			if (PlayerPrefs.GetString("GameOver") == "Opponent" || PlayerPrefs.GetInt("PlayerScore") == 10) {
 				PlayerPrefs.SetString("GameOver", "true");
 				Final.text = "Victory";
